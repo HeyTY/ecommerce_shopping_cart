@@ -1,0 +1,16 @@
+.thumbnail img {
+	max-height: 250px;
+}
+
+.thumbnail .description {
+	color: #7f7f7f;
+}
+
+.thumbnail .price {
+	font-weight: 700;
+	text-align: center;
+}
+
+.thumbnail .addCart {
+
+}
