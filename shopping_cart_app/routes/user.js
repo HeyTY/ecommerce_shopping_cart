@@ -7,6 +7,19 @@ var csrfProtection = csrf();
 router.use(csrfProtection);
 
 
+router.get("/profile", isLoggedin , function (req, res, next){
+	res.render("user/profile");
+})
+
+router.get("/logout", isLoggedin, function (req, res, next){
+	req.logout();
+	res.redirect("/");
+});
+
+router.use("/", notLoggedin, function (req, res, next){
+	next();
+});
+
 
 router.get("/signup", function (req, res, next) {
 	var messages = req.flash("error");
@@ -20,9 +33,6 @@ router.post("/signup", passport.authenticate("local.signup", {
 	failureFlash: true
 }));
 
-router.get("/profile", isLoggedin , function (req, res, next){
-	res.render("user/profile");
-})
 
 router.get("/signin", function (req, res, next){
 	var messages = req.flash("error");
@@ -36,16 +46,19 @@ router.post("/signin", passport.authenticate("local.signin", {
 	failureFlash: true
 }));
 
-router.get("/logout", function (req, res, next){
-	req.logout();
-	res.redirect("/");
-});
 
 function isLoggedin (req,res,next) {
 	if (req.isAuthenticated()){
 		return next();
 	}
 	res.redirect("/user/signin");
+}
+
+function notLoggedin (req,res,next) {
+	if (!req.isAuthenticated()){
+		return next();
+	}
+	res.redirect("/");
 }
 
 module.exports = router;
